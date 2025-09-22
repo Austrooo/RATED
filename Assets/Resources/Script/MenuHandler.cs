@@ -32,9 +32,8 @@ public class MenuHandler : MonoBehaviour
 
     void Start()
     {
-        // GameData.instance.ratingObject.SetActive(false);
-        Debug.Log(CheckExistingSaves());
-        if (CheckExistingSaves())
+        Debug.Log($"Current saved chapter: {PlayerPrefs.GetInt("CurrentChapter")}");
+        if (PlayerPrefs.GetInt("CurrentChapter") != 0)
         {
             // If there are existing saves, show the continue button
             ContinueButton.SetActive(true);
@@ -48,16 +47,10 @@ public class MenuHandler : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             Settings();
         }
-    }
-
-    private bool CheckExistingSaves()
-    {
-        Debug.Log(PlayerPrefs.GetInt("CurrentChapter"));
-        return PlayerPrefs.HasKey("CurrentChapter");
     }
     public void StartGame()
     {
@@ -66,7 +59,7 @@ public class MenuHandler : MonoBehaviour
 
     public void ContinueGame()
     {
-        int currentChapter = PlayerPrefs.GetInt("CurrentChapter", 0);
+        int currentChapter = PlayerPrefs.GetInt("CurrentChapter");
         StartCoroutine(LoadChapter((GameState)currentChapter));
     }
 
@@ -145,7 +138,7 @@ public class MenuHandler : MonoBehaviour
                 Debug.LogError("Invalid chapter selected.");
                 break;
         }
-        PlayerPrefs.SetInt("CurrentChapter", (int)chapter);
+        if((int)chapter != 0) PlayerPrefs.SetInt("CurrentChapter", (int)chapter);  
         Debug.Log("Loading Chapter " + (int)chapter);
         TransitionManager.instance.FadeIn();
         yield return new WaitForSeconds(1f);

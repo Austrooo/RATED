@@ -111,11 +111,20 @@ public class FifthChapter : MonoBehaviour
     void Update()
     {
         #region SubChapter3
-        if (vp.isPlaying) hasStarted = true;
-        if (hasStarted && !vp.isPlaying)
+        if (vp != null && subChapterIndex == 4)
         {
-            StartCoroutine(LoadSubChapter(subChapterIndex));
-            hasStarted = false;
+            if (vp.isPlaying) 
+            {
+                hasStarted = true;
+            }
+            else if (hasStarted && !vp.isPlaying)
+            {
+                if (vp.time > 0 && vp.time >= vp.length - 0.1f)
+                {
+                    StartCoroutine(LoadSubChapter(subChapterIndex));
+                    hasStarted = false;
+                }
+            }
         }
         #endregion
 
@@ -144,7 +153,6 @@ public class FifthChapter : MonoBehaviour
                 bgImage.sprite = defaultBG;
                 break;
             case 3:
-                // Debug.Log("kosong yak ini");
                 AudioHandler.instance.PlaySFX("OpenMaskEnding");
                 if (sc.choosedOutfit == "casual")
                 {
@@ -154,7 +162,10 @@ public class FifthChapter : MonoBehaviour
                 {
                     vp.clip = blondeEnding;
                 }
+                vp.Stop();
+                vp.time = 0;
                 vp.Play();
+                hasStarted = false;
                 break;
             case 4:
                 ChooseEnding();

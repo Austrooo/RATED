@@ -278,13 +278,21 @@ public class FirstChapter : MonoBehaviour
     void Update()
     {
         #region SubChapter1
-        if (vp.isPlaying) hasStarted = true;
-        if (hasStarted && !vp.isPlaying && currentSubChapter == 1)
+        if (vp != null && currentSubChapter == 1)
         {
-            currentSubChapter++;
-            StartCoroutine(LoadSubChapter(currentSubChapter));
-            hasStarted = false;
-
+            if (vp.isPlaying) 
+            {
+                hasStarted = true;
+            }
+            else if (hasStarted && !vp.isPlaying)
+            {
+                if (vp.time > 0 && vp.time >= vp.length - 0.1f)
+                {
+                    currentSubChapter++;
+                    StartCoroutine(LoadSubChapter(currentSubChapter));
+                    hasStarted = false;
+                }
+            }
         }
         #endregion
 
@@ -298,6 +306,14 @@ public class FirstChapter : MonoBehaviour
                 AudioHandler.instance.PlayMusic("Gameplay");
                 break;
             case 1:
+                // Reset video player to beginning
+                if (vp != null)
+                {
+                    vp.Stop();
+                    vp.time = 0;
+                    vp.Play();
+                }
+                hasStarted = false;
                 break;
             case 2:
                 displayedCharacter.sprite = sleepOutfit;

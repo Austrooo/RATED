@@ -295,12 +295,21 @@ public class ThirdChapter : MonoBehaviour
     private void Update()
     {
         #region SubChapter1
-        if (vp.isPlaying) hasStarted = true;
-        if (hasStarted && !vp.isPlaying)
+        if (vp != null && subChapterIndex == 2)
         {
-            AudioHandler.instance.StopAllSFX();
-            StartCoroutine(LoadSubChapter(subChapterIndex));
-            hasStarted = false;
+            if (vp.isPlaying) 
+            {
+                hasStarted = true;
+            }
+            else if (hasStarted && !vp.isPlaying)
+            {
+                if (vp.time > 0 && vp.time >= vp.length - 0.1f)
+                {
+                    AudioHandler.instance.StopAllSFX();
+                    StartCoroutine(LoadSubChapter(subChapterIndex));
+                    hasStarted = false;
+                }
+            }
         }
         #endregion
 
@@ -347,7 +356,10 @@ public class ThirdChapter : MonoBehaviour
                 if (choosedOutfit == "blonde") vp.clip = blondeVC;
                 else if (choosedOutfit == "casual") vp.clip = casualVC;
                 else vp.clip = blondeVC;
+                vp.Stop();
+                vp.time = 0;
                 vp.Play();
+                hasStarted = false; // Reset the flag
                 break;
             case 2:
                 if (choosedOutfit == "blonde") BG.sprite = blondeWithPhone;

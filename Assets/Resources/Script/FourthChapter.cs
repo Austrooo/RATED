@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class FourthChapter : MonoBehaviour
 {
@@ -270,41 +271,76 @@ public class FourthChapter : MonoBehaviour
     void Update()
     {
         #region SubChapter1
-        if (vp1.isPlaying) hasStarted1 = true;
-        if (hasStarted1 && !vp1.isPlaying)
+        if (vp1 != null && subChapterIndex == 2)
         {
-            StartCoroutine(LoadSubChapter(subChapterIndex));
-            AudioHandler.instance.StopAllSFX();
-            hasStarted1 = false;
+            if (vp1.isPlaying) 
+            {
+                hasStarted1 = true;
+            }
+            else if (hasStarted1 && !vp1.isPlaying)
+            {
+                if (vp1.time > 0 && vp1.time >= vp1.length - 0.1f)
+                {
+                    StartCoroutine(LoadSubChapter(subChapterIndex));
+                    AudioHandler.instance.StopAllSFX();
+                    hasStarted1 = false;
+                }
+            }
         }
         #endregion
 
         #region SubChapter3
-        if (vp3.isPlaying) hasStarted3 = true;
-        if (hasStarted3 && !vp3.isPlaying)
+        if (vp3 != null && subChapterIndex == 4)
         {
-            StartCoroutine(LoadSubChapter(subChapterIndex));
-            hasStarted3 = false;
+            if (vp3.isPlaying) 
+            {
+                hasStarted3 = true;
+            }
+            else if (hasStarted3 && !vp3.isPlaying)
+            {
+                if (vp3.time > 0 && vp3.time >= vp3.length - 0.1f)
+                {
+                    StartCoroutine(LoadSubChapter(subChapterIndex));
+                    hasStarted3 = false;
+                }
+            }
         }
         #endregion
 
         #region SubChapter5
-        if (vp5.isPlaying) hasStarted5 = true;
-        if (hasStarted5 && !vp5.isPlaying)
+        if (vp5 != null && subChapterIndex == 6)
         {
-            StartCoroutine(LoadSubChapter(subChapterIndex));
-            AudioHandler.instance.StopAllSFX();
-            hasStarted5 = false;
+            if (vp5.isPlaying) 
+            {
+                hasStarted5 = true;
+            }
+            else if (hasStarted5 && !vp5.isPlaying)
+            {
+                if (vp5.time > 0 && vp5.time >= vp5.length - 0.1f)
+                {
+                    StartCoroutine(LoadSubChapter(subChapterIndex));
+                    AudioHandler.instance.StopAllSFX();
+                    hasStarted5 = false;
+                }
+            }
         }
         #endregion
 
         #region SubChapter7
-
-        if (vp7.isPlaying) hasStarted7 = true;
-        if (hasStarted7 && !vp7.isPlaying)
+        if (vp7 != null && subChapterIndex == 8)
         {
-            StartCoroutine(MenuHandler.instance.LoadChapter(MenuHandler.GameState.Chapter_5));
-            hasStarted7 = false;
+            if (vp7.isPlaying) 
+            {
+                hasStarted7 = true;
+            }
+            else if (hasStarted7 && !vp7.isPlaying)
+            {
+                if (vp7.time > 0 && vp7.time >= vp7.length - 0.1f)
+                {
+                    StartCoroutine(MenuHandler.instance.LoadChapter(MenuHandler.GameState.Chapter_5));
+                    hasStarted7 = false;
+                }
+            }
         }
         #endregion
     }
@@ -318,6 +354,9 @@ public class FourthChapter : MonoBehaviour
                 break;
             case 1:
                 hasStarted1 = false;
+                vp1.Stop();
+                vp1.time = 0;
+                vp1.Play();
                 AudioHandler.instance.PlaySFX("SlidingDoorOpen");
                 break;
             case 2:
@@ -347,6 +386,10 @@ public class FourthChapter : MonoBehaviour
                     vp3.clip = blondeEnterOffice;
                 }
                 else vp3.clip = blondeEnterOffice;
+                vp3.Stop();
+                vp3.time = 0;
+                vp3.Play();
+                hasStarted3 = false; // Reset the flag
                 break;
             case 4:
                 usernameInput.text = "";
@@ -365,6 +408,10 @@ public class FourthChapter : MonoBehaviour
                     vp5.clip = blondeWorking;
                 }
                 else vp5.clip = blondeWorking;
+                vp5.Stop();
+                vp5.time = 0;
+                vp5.Play();
+                hasStarted5 = false; // Reset the flag
                 break;
             case 6:
                 reaction = "";
@@ -397,6 +444,10 @@ public class FourthChapter : MonoBehaviour
                         vp7.clip = emphatizeCasual;
                         break;
                 }
+                vp7.Stop();
+                vp7.time = 0;
+                vp7.Play();
+                hasStarted7 = false; // Reset the flag
                 break;
             case 8:
                 StartCoroutine(CoworkerGivingRating());
